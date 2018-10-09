@@ -23,17 +23,18 @@ class GrammarParser {
             int len = strlen(input);
             int startPos = 0;
             int curPos = 0;
+            char prod[len];
 
             while (curPos <= len) {
                 if (input[curPos] == productionSeparator ||
                     input[curPos] == endSymbol)
                 {
                     int prodLength = (curPos - startPos);
-                    char* prod = (char*)malloc(sizeof(char) * prodLength);
+                    
                     strncpy(prod, input + startPos, prodLength);
                     prod[prodLength] = '\0';
                     parseProduction(prod);
-                    free(prod);
+
                     startPos = curPos + 1;
                 }
 
