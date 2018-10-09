@@ -11,7 +11,7 @@ Regulile de citire se afișează înaintea citirii și sunt următoarele:
 3.  Simbolurile neterminale sunt scrise cu litere mari;
 4.  Simbolurile terminale sunt scrise cu litere mici;
 5.  Secvența vidă va fi `@`.
-6.  Simbolul care marchează sfârșitul gramaticii este `*`.
+6.  Simbolul care marchează sfârșitul gramaticii este `&`.
 
 Se cere afișarea mulțimilor `V_N`, `V_T`, `S`, `P`.
 
