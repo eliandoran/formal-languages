@@ -1,11 +1,31 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <string.h>
 
 using namespace std;
 
+class Production {
+    public:
+        const char startingSymbol;
+        const string replacement;
+
+        Production(const char startingSymbol, const string replacement):
+            startingSymbol(startingSymbol), replacement(replacement) {};
+};
+
 class Grammar {
-    
+    private:
+        const vector<Production> productions;
+
+    public:
+        Grammar(vector<Production> productions): productions(productions) {
+
+        }
+
+        const vector<Production> getProductions() {
+            return productions;
+        }
 };
 
 class GrammarParser {
@@ -14,8 +34,17 @@ class GrammarParser {
         const char nullSymbol = '@';
         const char endSymbol = '&';
 
-        void parseProduction(char* prod) {
-            cout<<prod<<endl;
+        Production parseProduction(char* prod) {
+            int len = strlen(prod);
+
+            if (len < 2) {
+                cout<<"Error";
+            }
+
+            char startingSymbol = prod[0];
+            string replacement = string(prod + 1);
+
+            return Production(startingSymbol, replacement);
         }
 
     public:
@@ -25,6 +54,8 @@ class GrammarParser {
             int curPos = 0;
             char prod[len];
 
+            vector<Production> productions;
+
             while (curPos <= len) {
                 if (input[curPos] == productionSeparator ||
                     input[curPos] == endSymbol)
@@ -33,20 +64,26 @@ class GrammarParser {
                     
                     strncpy(prod, input + startPos, prodLength);
                     prod[prodLength] = '\0';
-                    parseProduction(prod);
+                    productions.push_back(parseProduction(prod));
 
                     startPos = curPos + 1;
                 }
 
                 curPos++;
             }
+
+            return Grammar(productions);
         }
 };
 
 int main(int argc, char const *argv[])
 {
     GrammarParser parser;
-    parser.parse("SAB$AaA$A@$Ba&");
+    Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
+
+    for (Production production : resultingGrammar.getProductions()) {
+        cout<<production.startingSymbol<<"->"<<production.replacement<<endl;
+    }
 
     return 0;
 }
