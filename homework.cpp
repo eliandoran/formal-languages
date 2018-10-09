@@ -44,7 +44,14 @@ class GrammarParser {
             char startingSymbol = prod[0];
             string replacement = string(prod + 1);
 
+            if (isNullSet(replacement))
+                replacement = "";
+
             return Production(startingSymbol, replacement);
+        }
+
+        bool isNullSet(string symbol) {
+            return (symbol.length() == 1 && symbol[0] == nullSymbol);
         }
 
     public:
@@ -82,7 +89,12 @@ int main(int argc, char const *argv[])
     Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
 
     for (Production production : resultingGrammar.getProductions()) {
-        cout<<production.startingSymbol<<"->"<<production.replacement<<endl;
+        string replacement = production.replacement;
+
+        if (replacement.empty())
+            replacement = "lambda";
+
+        cout<<production.startingSymbol<<"->"<<replacement<<endl;
     }
 
     return 0;
