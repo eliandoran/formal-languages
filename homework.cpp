@@ -8,10 +8,10 @@ using namespace std;
 
 class ValidationError {
     public:
-        const char* message;
-        int position;
+        const string message;
+        const int position;
 
-        ValidationError(const char* message, int position): message(message), position(position) {}
+        ValidationError(string message, int position): message(message), position(position) {}
 };
 
 class Production {
@@ -72,6 +72,12 @@ class GrammarParser {
 
             vector<Production> productions;
 
+            if (input[len - 1] != endSymbol) {
+                stringstream message;
+                message<<"A grammar definition must end with `"<<endSymbol<<"`, not `"<<input[len - 1]<<"`.";
+                throw ValidationError(message.str(), len - 1);
+            }
+
             while (curPos <= len) {
                 if (input[curPos] == productionSeparator ||
                     input[curPos] == endSymbol)
@@ -116,7 +122,7 @@ int main(int argc, char const *argv[])
     GrammarParser parser;
 
     //Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
-    char* inputData = "SAB$Azz$Ak@$B&";
+    char* inputData = "SAB$Azz$Ak@$Ba&";
 
     try {
         Grammar resultingGrammar = parser.parse(inputData);
