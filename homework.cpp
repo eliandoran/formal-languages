@@ -53,14 +53,16 @@ class GrammarParser {
             char startingSymbol = prod[0];
             string replacement = string(prod + 1);
 
-            if (isNullSet(replacement))
+            int nullSymbolPos = replacement.find_first_of(nullSymbol);
+            if (nullSymbolPos != string::npos) {
+                if (replacement.length() != 1) {
+                    throw ValidationError("The null symbol cannot be used with other characters in a production.", startingPos + nullSymbolPos);
+                }
+
                 replacement = "";
+            }
 
             return Production(startingSymbol, replacement);
-        }
-
-        bool isNullSet(string symbol) {
-            return (symbol.length() == 1 && symbol[0] == nullSymbol);
         }
 
     public:
@@ -122,7 +124,7 @@ int main(int argc, char const *argv[])
     GrammarParser parser;
 
     //Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
-    char* inputData = "SAB$Azz$Ak@$Ba&";
+    char* inputData = "SAB$Azz$A@$Ba&";
 
     try {
         Grammar resultingGrammar = parser.parse(inputData);
