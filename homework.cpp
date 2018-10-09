@@ -5,6 +5,14 @@
 
 using namespace std;
 
+class ValidationError {
+    public:
+        const char* message;
+        int position;
+
+        ValidationError(const char* message, int position): message(message), position(position) {}
+};
+
 class Production {
     public:
         const char startingSymbol;
@@ -38,7 +46,7 @@ class GrammarParser {
             int len = strlen(prod);
 
             if (len < 2) {
-                cout<<"Error";
+                throw ValidationError("A production must have at least two characters", 5);
             }
 
             char startingSymbol = prod[0];
@@ -83,19 +91,34 @@ class GrammarParser {
         }
 };
 
+void printValidationError(const ValidationError& error, const char* inputData) {
+    cout<<"Validation error: "<<endl
+        <<"\t"<<error.message<<endl
+        <<"at: "<<endl
+        <<"\t"<<inputData<<endl;
+}
+
 int main(int argc, char const *argv[])
 {
     GrammarParser parser;
-    Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
 
-    for (Production production : resultingGrammar.getProductions()) {
-        string replacement = production.replacement;
+    //Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
+    char* inputData = "SAB$A$A@$Ba&";
 
-        if (replacement.empty())
-            replacement = "lambda";
+    try {
+        Grammar resultingGrammar = parser.parse(inputData);
 
-        cout<<production.startingSymbol<<"->"<<replacement<<endl;
-    }
+        for (Production production : resultingGrammar.getProductions()) {
+            string replacement = production.replacement;
+
+            if (replacement.empty())
+                replacement = "lambda";
+
+            cout<<production.startingSymbol<<"->"<<replacement<<endl;
+        }
+    } catch (ValidationError error) {
+        printValidationError(error, inputData);
+    }        
 
     return 0;
 }
