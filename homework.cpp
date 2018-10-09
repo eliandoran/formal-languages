@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <string.h>
@@ -42,11 +43,11 @@ class GrammarParser {
         const char nullSymbol = '@';
         const char endSymbol = '&';
 
-        Production parseProduction(char* prod) {
+        Production parseProduction(char* prod, int startingPos) {
             int len = strlen(prod);
 
             if (len < 2) {
-                throw ValidationError("A production must have at least two characters", 5);
+                throw ValidationError("A production must have at least two characters.", startingPos);
             }
 
             char startingSymbol = prod[0];
@@ -79,7 +80,7 @@ class GrammarParser {
                     
                     strncpy(prod, input + startPos, prodLength);
                     prod[prodLength] = '\0';
-                    productions.push_back(parseProduction(prod));
+                    productions.push_back(parseProduction(prod, startPos + 1));
 
                     startPos = curPos + 1;
                 }
@@ -91,11 +92,23 @@ class GrammarParser {
         }
 };
 
-void printValidationError(const ValidationError& error, const char* inputData) {
+string buildArrowIndicator(int pos) {
+    stringstream arrowIndicator;
+
+    for (int i=0; i<pos; i++) {
+        arrowIndicator<<".";
+    }
+
+    arrowIndicator<<"^";
+    return arrowIndicator.str();
+}
+
+void printValidationError(const ValidationError& error, const char* inputData) {    
     cout<<"Validation error: "<<endl
         <<"\t"<<error.message<<endl
-        <<"at: "<<endl
-        <<"\t"<<inputData<<endl;
+        <<"at column "<<error.position<<":"<<endl
+        <<"\t"<<inputData<<endl
+        <<"\t"<<buildArrowIndicator(error.position)<<endl;    
 }
 
 int main(int argc, char const *argv[])
@@ -103,7 +116,7 @@ int main(int argc, char const *argv[])
     GrammarParser parser;
 
     //Grammar resultingGrammar = parser.parse("SAB$AaA$A@$Ba&");
-    char* inputData = "SAB$A$A@$Ba&";
+    char* inputData = "SAB$Azz$Ak@$B&";
 
     try {
         Grammar resultingGrammar = parser.parse(inputData);
