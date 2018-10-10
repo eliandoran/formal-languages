@@ -1,8 +1,8 @@
 const expand = require("expand-range");
 const chalk = require("chalk");
 
-const GrammarParser = require("./grammar");
-const GrammarColorizer = require("./colorizer");
+const GrammarParser = require("./src/grammar");
+const GrammarColorizer = require("./src/colorizer");
 
 const grammarDefinition = {
     lambdaSymbol: "@",
