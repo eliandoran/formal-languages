@@ -107,7 +107,10 @@ prompt([
    {
        name: "grammar",
        message: "Date gramatică:",
-       transformer: (input) => colorizer.colorize(input)
+       transformer: (input) => colorizer.colorize(input),
+       validate: (input) => {
+           return true;
+       }
    } 
 ]).then((userData) => {
     display(userData.grammar);
