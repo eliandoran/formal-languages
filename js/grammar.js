@@ -32,11 +32,14 @@ class GrammarParser {
                 this._validateProduction(production, context);
                                 
                 const initialSymbol = production[0];
-                const replacement = production.substring(1);
+                let replacement = production.substring(1);
 
                 this._validateProductionReplacement(replacement, {
                     startPos: pos + 2
                 });
+
+                if (replacement == lambdaSymbol)
+                    replacement = null;
 
                 pos += production.length + 1;
 
@@ -48,15 +51,15 @@ class GrammarParser {
     
         const terminalSymbols = new Set(
             productions
-                .map((production) => production.replacement.split(""))            
+                .map((production) => (production.replacement !== null ? production.replacement.split("") : null))
                 .reduce((acc, symbols) => acc.concat(symbols), [])
-                .filter((symbol) => terminalAlphabet.indexOf(symbol) !== -1)
+                .filter((symbol) => (terminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
         );
     
         const nonterminalSymbols = new Set(
             productions
                 .map((production) => production.initialSymbol)
-                .filter((symbol) => nonterminalAlphabet.indexOf(symbol) !== -1)
+                .filter((symbol) => (nonterminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
         );
 
         const startingSymbol = nonterminalSymbols.values().next().value;

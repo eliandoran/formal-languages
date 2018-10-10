@@ -1,7 +1,9 @@
 const GrammarParser = require("./grammar");
 
 const getSetString = (set) =>
-    `{ ${ [...set].join(", ") } }`;
+    `{ ${ [...set]
+        .map((symbol) => symbol !== null ? symbol : "lambda")
+        .join(", ") } }`;
 
 const getArrowIndicator = (startPos, length) =>
     [
@@ -38,7 +40,7 @@ function display(input) {
         return;
 
     let productionsOutput = grammar.productions
-        .map((production) => `${production.initialSymbol} -> ${production.replacement}`)
+        .map((production) => `${production.initialSymbol} -> ${production.replacement || "lambda"}`)
         .join("; ");
 
     let nonterminalSymbolsOutput = 
