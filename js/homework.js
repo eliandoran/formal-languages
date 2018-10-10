@@ -36,20 +36,20 @@ const getArrowIndicator = (startPos, length) =>
 
 function tryParse(input) {
     const parser = new GrammarParser(grammarDefinition);
-
+    
     try {
         const grammar = parser.parse(input);
         return grammar;
     } catch (e) {
-        let errorMessage = `\
-Validation error:
-        ${e.message}
-at column ${e.startPos}:
-        ${input}
-        ${getArrowIndicator(e.startPos, e.length)}
-        `;
+        const message = [
+            `\nValidation error:`,
+            `\t${chalk.whiteBright(e.message)}`,
+            `at column ${e.startPos}:`,
+            `\t${colorizer.colorize(input)}`,
+            `\t${chalk.red.bold(getArrowIndicator(e.startPos, e.length))}`
+        ].join("\n");
 
-        console.error(errorMessage);        
+        console.error(chalk.redBright(message));        
     }
 
     return null;
@@ -70,7 +70,7 @@ function display(input) {
 
     let terminalSymbolsOutput =
         `V_T = ${ getSetString(grammar.terminalSymbols) }`;
-
+    
     console.log([
         productionsOutput,
         nonterminalSymbolsOutput,
@@ -106,7 +106,8 @@ Exemplu:
 prompt([
    {
        name: "grammar",
-       message: "Date gramatică:"
+       message: "Date gramatică:",
+       transformer: (input) => colorizer.colorize(input)
    } 
 ]).then((userData) => {
     display(userData.grammar);
