@@ -1,8 +1,11 @@
 class ValidationException {
     constructor(message, context) {
         this.message = message;
-        this.startPos = context.startPos;
-        this.length = context.length;
+
+        if (context !== undefined) {
+            this.startPos = context.startPos;
+            this.length = context.length;
+        }
     }
 }
 
@@ -12,6 +15,10 @@ class GrammarValidator {
     }
 
     validateInput(input) {
+        if (input.length < 2) {
+            throw new ValidationException("Gramatica nu poate fi vidă.");
+        }
+
         if (input[input.length - 1] != this.def.endingSymbol) {
             throw new ValidationException(`Gramatica trebuie să conțină simbolul de sfârșit "${this.def.endingSymbol}".`, {
                 startPos: input.length

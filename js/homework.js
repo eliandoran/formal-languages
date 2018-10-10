@@ -21,6 +21,7 @@ const grammarColor = {
     invalidSymbol: chalk.redBright.bold
 };
 
+const parser = new GrammarParser(grammarDefinition);
 const colorizer = new GrammarColorizer(grammarDefinition, grammarColor);
 
 const getSetString = (set) =>
@@ -36,8 +37,6 @@ const getArrowIndicator = (startPos, length) =>
     ].join("");
 
 function tryParse(input) {
-    const parser = new GrammarParser(grammarDefinition);
-    
     try {
         const grammar = parser.parse(input);
         return grammar;
@@ -110,7 +109,21 @@ prompt([
        message: "Date gramatică:",
        transformer: (input) => colorizer.colorize(input),
        validate: (input) => {
-           return true;
+            try {
+                parser.parse(input);
+            } catch (e) {
+                const message = [
+                    `${chalk.whiteBright(e.message)}`,
+                    `\t${colorizer.colorize(input)}`
+                ];
+
+                if (e.startPos !== undefined)
+                    message.push(`\t${chalk.red.bold(getArrowIndicator(e.startPos, e.length))}`);
+
+                return chalk.redBright(message.join("\n"));
+            }
+
+            return true;
        }
    } 
 ]).then((userData) => {
