@@ -2,8 +2,8 @@ const expand = require("expand-range");
 
 const separatorSymbol = "$";
 const endingSymbol = "&";
-const terminalSymbols = expand("a..z");
-const nonterminalSymbols = expand("A..Z");
+const terminalAlphabet = expand("a..z");
+const nonterminalAlphabet = expand("A..Z");
 
 function parseGrammar(input) {
     // Trim ending symbol
@@ -21,23 +21,23 @@ function parseGrammar(input) {
             }
         });
 
-    const actualTerminalSymbols = new Set(
+    const terminalSymbols = new Set(
         productions
             .map((production) => production.replacement.split(""))            
             .reduce((acc, symbols) => acc.concat(symbols), [])
-            .filter((symbol) => terminalSymbols.indexOf(symbol) !== -1)
+            .filter((symbol) => terminalAlphabet.indexOf(symbol) !== -1)
     );
 
-    const actualNonterminalSymbols = new Set(
+    const nonterminalSymbols = new Set(
         productions
             .map((production) => production.initialSymbol)
-            .filter((symbol) => nonterminalSymbols.indexOf(symbol) !== -1)
+            .filter((symbol) => nonterminalAlphabet.indexOf(symbol) !== -1)
     );
 
     return {
         productions,        
-        terminalSymbols: actualTerminalSymbols,
-        nonterminalSymbols: actualNonterminalSymbols
+        terminalSymbols,
+        nonterminalSymbols
     }
 }
 
@@ -57,9 +57,7 @@ function display(input) {
     let terminalSymbolsOutput =
         `V_T = ${ getSetString(grammar.terminalSymbols) }`;
 
-    console.log(productionsOutput);
-    console.log(nonterminalSymbolsOutput);
-    console.log(terminalSymbolsOutput);
+    console.log([ productionsOutput, nonterminalSymbolsOutput, terminalSymbolsOutput ].join("\n"));
 }
 
 display("SAB$AaA$A@$Ba&");
