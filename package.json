@@ -1,0 +1,22 @@
+{
+  "name": "eliandoran.formal-languages-homework",
+  "version": "1.0.0",
+  "description": "Să se citească o gramatică independentă de context sub formă de un șir de caractere. Citirea se face de la tastatură și din fișier. Se va construi un meniu corespunzător.",
+  "main": "homework.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliandoran/formal-languages.git"
+  },
+  "author": "Elian Doran <elian@doran.xyz>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/eliandoran/formal-languages/issues"
+  },
+  "homepage": "https://github.com/eliandoran/formal-languages#readme",
+  "dependencies": {
+    "expand-range": "^2.0.1"
+  }
+}
