@@ -5,9 +5,9 @@ const getSetString = (set) =>
 
 const getArrowIndicator = (startPos, length) =>
     [
-        ".".repeat(Math.max(0, startPos - 1)),
+        " ".repeat(Math.max(0, startPos - 1)),
         "^",
-        "~".repeat(length - startPos)
+        "~".repeat(length - 1)
     ].join("");
 
 function tryParse(input) {

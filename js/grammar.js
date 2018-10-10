@@ -1,5 +1,6 @@
 const expand = require("expand-range");
 
+const lambdaSymbol = "@";
 const separatorSymbol = "$";
 const endingSymbol = "&";
 const terminalAlphabet = expand("a..z");
@@ -9,6 +10,7 @@ class ValidationException {
     constructor(message, context) {
         this.message = message;
         this.startPos = context.startPos;
+        this.length = context.length;
     }
 }
 
@@ -28,12 +30,19 @@ class GrammarParser {
                     startPos: pos + 1
                 };
                 this._validateProduction(production, context);
-                
+                                
+                const initialSymbol = production[0];
+                const replacement = production.substring(1);
+
+                this._validateProductionReplacement(replacement, {
+                    startPos: pos + 2
+                });
+
                 pos += production.length + 1;
 
                 return {
-                    initialSymbol: production[0],
-                    replacement: production.substring(1)
+                    initialSymbol,
+                    replacement
                 }
             });
     
@@ -76,6 +85,17 @@ class GrammarParser {
                 length: productionString.length
             });
         }
+    }
+
+    _validateProductionReplacement(productionReplacement, context) {
+        if (productionReplacement.indexOf(lambdaSymbol) === -1)
+            return;
+        
+        if (productionReplacement.length > 1)
+            throw new ValidationException("The lambda symbol can be the only replacement in a production.", {
+                startPos: context.startPos,
+                length: productionReplacement.length
+            });
     }
 }
 
