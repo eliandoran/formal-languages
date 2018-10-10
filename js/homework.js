@@ -3,9 +3,28 @@ const GrammarParser = require("./grammar");
 const getSetString = (set) =>
     `{ ${ [...set].join(", ") } }`;
 
+function tryParse(input) {
+    const parser = new GrammarParser();
+
+    try {
+        const grammar = parser.parse(input);
+        return grammar;
+    } catch (e) {
+        let errorMessage = `Validation error:
+        ${e.message}
+        `;
+
+        console.error(errorMessage);        
+    }
+
+    return null;
+}
+
 function display(input) {
-    var parser = new GrammarParser();
-    var grammar = parser.parse(input);
+    const grammar = tryParse(input);
+
+    if (grammar === null)
+        return;
 
     let productionsOutput = grammar.productions
         .map((production) => `${production.initialSymbol} -> ${production.replacement}`)
@@ -23,4 +42,4 @@ function display(input) {
         terminalSymbolsOutput ].join("\n"));
 }
 
-display("SAB$A$A@$Ba&");
+display("SAB$Ax$A$Ba&");

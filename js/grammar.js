@@ -5,6 +5,12 @@ const endingSymbol = "&";
 const terminalAlphabet = expand("a..z");
 const nonterminalAlphabet = expand("A..Z");
 
+class ValidationException {
+    constructor(message) {
+        this.message = message;
+    }
+}
+
 class GrammarParser {
     parse(input) {
         // Trim ending symbol
@@ -16,6 +22,8 @@ class GrammarParser {
         const productions = input
             .split(separatorSymbol)
             .map((production) => {
+                this._validateProduction(production);
+
                 return {
                     initialSymbol: production[0],
                     replacement: production.substring(1)
@@ -39,6 +47,12 @@ class GrammarParser {
             productions,        
             terminalSymbols,
             nonterminalSymbols
+        }
+    }
+
+    _validateProduction(productionString) {
+        if (productionString.length < 2) {
+            throw new ValidationException("Production must contain at least two characters.");
         }
     }
 }
