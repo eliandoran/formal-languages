@@ -53,4 +53,4 @@ function display(input) {
         terminalSymbolsOutput ].join("\n"));
 }
 
-display("Sa$aa$ca$ac$da");
+display("SAB$AaA$A@$Ba&");

@@ -15,10 +15,13 @@ class ValidationException {
 class GrammarParser {
     parse(input) {
         // Trim ending symbol
-        const lastChar = input[input.length - 1];
-        if (lastChar == endingSymbol) {
-            input = input.substring(0, input.length - 1);
+        if (input[input.length - 1] != endingSymbol) {
+            throw new ValidationException(`A grammar definition must end with ${endingSymbol}.`, {
+                startPos: input.length
+            });
         }
+
+        input = input.substring(0, input.length - 1);
        
         let pos = 0;
 
