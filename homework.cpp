@@ -2,6 +2,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <set>
 #include <string.h>
 
 using namespace std;
@@ -43,6 +44,9 @@ class GrammarParser {
         const char nullSymbol = '@';
         const char endSymbol = '&';
 
+        const set<char> terminalSymbols;
+        const set<char> nonterminalSymbols;
+
         Production parseProduction(char* prod, int startingPos) {
             int len = strlen(prod);
 
@@ -63,6 +67,27 @@ class GrammarParser {
             }
 
             return Production(startingSymbol, replacement);
+        }
+
+        void parseSymbols(Production production) {
+            if (isTerminal(production.startingSymbol))
+                nonterminalSymbols.insert(production.startingSymbol);
+
+            for (char ch : production.replacement) {
+                if (isNonterminal(ch)) {
+                    char* anotherCh = new char;
+                    *anotherCh = ch;
+                    nonterminalSymbols.insert(*anotherCh);
+                }
+            }
+        }
+
+        inline bool isTerminal(char symbol) {
+            return (symbol >= 'a' && symbol <= 'z');
+        }
+
+        inline bool isNonterminal(char symbol) {
+            return (symbol >= 'A' && symbol <= 'Z');
         }
 
     public:
