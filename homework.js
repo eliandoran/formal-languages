@@ -25,12 +25,9 @@ function parseGrammar(input) {
 function display(input) {
     var grammar = parseGrammar(input);
 
-    let productionsOutput = "";
-    for (const production of grammar.productions) {
-        productionsOutput += `${production.initialSymbol} -> ${production.replacement}; `;
-    }
-
-    productionsOutput = productionsOutput.substring(0, productionsOutput.length - 2);
+    let productionsOutput = grammar.productions
+        .map((production) => `${production.initialSymbol} -> ${production.replacement}`)
+        .join("; ");
 
     console.log(productionsOutput);
 }
