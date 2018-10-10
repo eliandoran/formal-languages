@@ -17,7 +17,8 @@ const grammarColor = {
     separatorSymbol: chalk.gray,
     endingSymbol: chalk.green,
     terminalAlphabet: chalk.yellow.bold,
-    nonterminalAlphabet: chalk.blue.bold
+    nonterminalAlphabet: chalk.blue.bold,
+    invalidSymbol: chalk.redBright.bold
 };
 
 const colorizer = new GrammarColorizer(grammarDefinition, grammarColor);

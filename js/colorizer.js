@@ -7,14 +7,17 @@ class GrammarColorizer {
     colorize(grammarString) {
         return grammarString
             .split("")
-            .map((ch) => {            
+            .map((ch) => {
+                let colorWrapper = this.colors.invalidSymbol;
+
                 for (var definition in this.def) {
                     if (this.def[definition].indexOf(ch) !== -1) {
-                        return this.colors[definition](ch);
+                        colorWrapper = this.colors[definition];
+                        break;
                     }
                 }
-
-                return `"${ch}"`;
+                
+                return colorWrapper(ch);
             })
             .join("");
     }
