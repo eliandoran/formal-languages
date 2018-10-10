@@ -3,6 +3,13 @@ const GrammarParser = require("./grammar");
 const getSetString = (set) =>
     `{ ${ [...set].join(", ") } }`;
 
+const getArrowIndicator = (startPos, length) =>
+    [
+        ".".repeat(Math.max(0, startPos - 1)),
+        "^",
+        "~".repeat(length - startPos)
+    ].join("");
+
 function tryParse(input) {
     const parser = new GrammarParser();
 
@@ -10,8 +17,12 @@ function tryParse(input) {
         const grammar = parser.parse(input);
         return grammar;
     } catch (e) {
-        let errorMessage = `Validation error:
+        let errorMessage = `\
+Validation error:
         ${e.message}
+at column ${e.startPos}:
+        ${input}
+        ${getArrowIndicator(e.startPos, e.length)}
         `;
 
         console.error(errorMessage);        
@@ -42,4 +53,4 @@ function display(input) {
         terminalSymbolsOutput ].join("\n"));
 }
 
-display("SAB$Ax$A$Ba&");
+display("Sa$aa$ca$ac$da");

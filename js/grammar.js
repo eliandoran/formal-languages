@@ -6,8 +6,9 @@ const terminalAlphabet = expand("a..z");
 const nonterminalAlphabet = expand("A..Z");
 
 class ValidationException {
-    constructor(message) {
+    constructor(message, context) {
         this.message = message;
+        this.startPos = context.startPos;
     }
 }
 
@@ -19,10 +20,17 @@ class GrammarParser {
             input = input.substring(0, input.length - 1);
         }
        
+        let pos = 0;
+
         const productions = input
             .split(separatorSymbol)
-            .map((production) => {
-                this._validateProduction(production);
+            .map((production, index) => {
+                const context = {
+                    startPos: pos + 1
+                };
+                this._validateProduction(production, context);
+                
+                pos += production.length + 1;
 
                 return {
                     initialSymbol: production[0],
@@ -50,9 +58,12 @@ class GrammarParser {
         }
     }
 
-    _validateProduction(productionString) {
+    _validateProduction(productionString, context) {
         if (productionString.length < 2) {
-            throw new ValidationException("Production must contain at least two characters.");
+            throw new ValidationException("Production must contain at least two characters.", {
+                startPos: context.startPos,
+                length: productionString.length
+            });
         }
     }
 }
