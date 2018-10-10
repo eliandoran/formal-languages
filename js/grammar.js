@@ -14,13 +14,9 @@ class ValidationException {
 
 class GrammarParser {
     parse(input) {
-        // Trim ending symbol
-        if (input[input.length - 1] != endingSymbol) {
-            throw new ValidationException(`A grammar definition must end with ${endingSymbol}.`, {
-                startPos: input.length
-            });
-        }
+        this._validateInput(input);
 
+        // Trim ending symbol
         input = input.substring(0, input.length - 1);
        
         let pos = 0;
@@ -58,6 +54,14 @@ class GrammarParser {
             productions,        
             terminalSymbols,
             nonterminalSymbols
+        }
+    }
+
+    _validateInput(input) {
+        if (input[input.length - 1] != endingSymbol) {
+            throw new ValidationException(`A grammar definition must end with ${endingSymbol}.`, {
+                startPos: input.length
+            });
         }
     }
 
