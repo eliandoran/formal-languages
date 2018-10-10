@@ -1,11 +1,3 @@
-const expand = require("expand-range");
-
-const lambdaSymbol = "@";
-const separatorSymbol = "$";
-const endingSymbol = "&";
-const terminalAlphabet = expand("a..z");
-const nonterminalAlphabet = expand("A..Z");
-
 class ValidationException {
     constructor(message, context) {
         this.message = message;
@@ -15,6 +7,10 @@ class ValidationException {
 }
 
 class GrammarParser {
+    constructor(grammarDefinition) {
+        this.def = grammarDefinition;
+    }
+
     parse(input) {
         this._validateInput(input);
 
@@ -24,7 +20,7 @@ class GrammarParser {
         let pos = 0;
 
         const productions = input
-            .split(separatorSymbol)
+            .split(this.def.separatorSymbol)
             .map((production, index) => {
                 const context = {
                     startPos: pos + 1
@@ -38,7 +34,7 @@ class GrammarParser {
                     startPos: pos + 2
                 });
 
-                if (replacement == lambdaSymbol)
+                if (replacement == this.def.lambdaSymbol)
                     replacement = null;
 
                 pos += production.length + 1;
@@ -53,13 +49,13 @@ class GrammarParser {
             productions
                 .map((production) => (production.replacement !== null ? production.replacement.split("") : null))
                 .reduce((acc, symbols) => acc.concat(symbols), [])
-                .filter((symbol) => (terminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
+                .filter((symbol) => (this.def.terminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
         );
     
         const nonterminalSymbols = new Set(
             productions
                 .map((production) => production.initialSymbol)
-                .filter((symbol) => (nonterminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
+                .filter((symbol) => (this.def.nonterminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
         );
 
         const startingSymbol = nonterminalSymbols.values().next().value;
@@ -74,8 +70,8 @@ class GrammarParser {
     }
 
     _validateInput(input) {
-        if (input[input.length - 1] != endingSymbol) {
-            throw new ValidationException(`A grammar definition must end with ${endingSymbol}.`, {
+        if (input[input.length - 1] != this.def.endingSymbol) {
+            throw new ValidationException(`A grammar definition must end with ${this.def.endingSymbol}.`, {
                 startPos: input.length
             });
         }
@@ -91,7 +87,7 @@ class GrammarParser {
     }
 
     _validateProductionReplacement(productionReplacement, context) {
-        if (productionReplacement.indexOf(lambdaSymbol) === -1)
+        if (productionReplacement.indexOf(this.def.lambdaSymbol) === -1)
             return;
         
         if (productionReplacement.length > 1)
