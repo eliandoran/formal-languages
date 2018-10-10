@@ -71,7 +71,7 @@ class GrammarParser {
 
     _validateInput(input) {
         if (input[input.length - 1] != this.def.endingSymbol) {
-            throw new ValidationException(`A grammar definition must end with ${this.def.endingSymbol}.`, {
+            throw new ValidationException(`Gramatica trebuie să conțină simbolul de sfârșit "${this.def.endingSymbol}".`, {
                 startPos: input.length
             });
         }
@@ -79,7 +79,7 @@ class GrammarParser {
 
     _validateProduction(productionString, context) {
         if (productionString.length < 2) {
-            throw new ValidationException("Production must contain at least two characters.", {
+            throw new ValidationException("O producție trebuie să aibă cel puțin două caractere.", {
                 startPos: context.startPos,
                 length: productionString.length
             });
@@ -91,7 +91,7 @@ class GrammarParser {
             return;
         
         if (productionReplacement.length > 1)
-            throw new ValidationException("The lambda symbol can be the only replacement in a production.", {
+            throw new ValidationException("Lambda poate fi doar singurul simbol înlocuitor într-o producție.", {
                 startPos: context.startPos,
                 length: productionReplacement.length
             });

@@ -42,9 +42,9 @@ function tryParse(input) {
         return grammar;
     } catch (e) {
         const message = [
-            `\nValidation error:`,
+            `\nEroare de validare:`,
             `\t${chalk.whiteBright(e.message)}`,
-            `at column ${e.startPos}:`,
+            `la coloana ${e.startPos}:`,
             `\t${colorizer.colorize(input)}`,
             `\t${chalk.red.bold(getArrowIndicator(e.startPos, e.length))}`
         ].join("\n");
