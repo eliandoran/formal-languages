@@ -49,11 +49,15 @@ class GrammarParser {
                 .map((production) => production.initialSymbol)
                 .filter((symbol) => nonterminalAlphabet.indexOf(symbol) !== -1)
         );
+
+        const startingSymbol = nonterminalSymbols.values().next().value;
+        nonterminalSymbols.delete(startingSymbol);
     
         return {
             productions,        
             terminalSymbols,
-            nonterminalSymbols
+            nonterminalSymbols,
+            startingSymbol
         }
     }
 
