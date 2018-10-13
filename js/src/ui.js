@@ -47,25 +47,25 @@ class GrammarInterpreterUI {
                 message: "Date gramatică:",
                 transformer: (input) => colorizer.colorize(input),
                 validate: (input) => {
-                     try {
-                         parser.parse(input);
-                     } catch (e) {
-                         const message = [
-                             `${chalk.whiteBright(e.message)}`,
-                             `\t${colorizer.colorize(input)}`
-                         ];
-         
-                         if (e.startPos !== undefined) {
-                             const arrow = this._getArrowIndicator(e.startPos, e.length);
-                             message.push(`\t${chalk.red.bold(arrow)}`);
-                         }
-         
-                         return chalk.redBright(message.join("\n"));
-                     }
-         
-                     return true;
+                    try {
+                        parser.parse(input);
+                    } catch (e) {
+                        const message = [
+                            `${chalk.whiteBright(e.message)}`,
+                            `\t${colorizer.colorize(input)}`
+                        ];
+        
+                        if (e.startPos !== undefined) {
+                            const arrow = this._getArrowIndicator(e.startPos, e.length);
+                            message.push(`\t${chalk.red.bold(arrow)}`);
+                        }
+        
+                        return chalk.redBright(message.join("\n"));
+                    }
+        
+                    return true;
                 }
-            } 
+            }
          ]).then((userData) => {
              this.display(userData.grammar);
          });
@@ -81,7 +81,7 @@ class GrammarInterpreterUI {
         return [
             " ".repeat(Math.max(0, startPos - 1)),
             "^",
-            "~".repeat(length - 1)
+            "~".repeat(Math.max(0, length - 1))
         ].join("");
     }
 
