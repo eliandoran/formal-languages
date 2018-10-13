@@ -4,6 +4,8 @@ const GrammarColorizer = require("./colorizer");
 
 class GrammarInterpreterUI {
     constructor(config) {
+        this.exampleInput = "SAB$AaA$A@$Ba&";
+
         this.grammarDefinition = config.grammarDefinition;
         this.grammarColor = config.grammarColor;
 
@@ -45,6 +47,7 @@ class GrammarInterpreterUI {
             {
                 name: "grammar",
                 message: "Date gramatică:",
+                default: this.exampleInput,
                 transformer: (input) => colorizer.colorize(input),
                 validate: (input) => {
                     try {
@@ -110,7 +113,7 @@ Regulile de introducere a datelor sunt următoarele:
   6.  Simbolul care marchează sfârșitul gramaticii este ${colorizer.colorize("&")}.
 
 Exemplu:
-  ${colorizer.colorize("SAB$AaA$A@$Ba&")}
+  ${colorizer.colorize(this.exampleInput)}
 `
     }
 }
