@@ -20,7 +20,7 @@ class GrammarInterpreterUI {
             return;
     
         let productionsOutput = grammar.productions
-            .map((production) => `${production.initialSymbol} → ${this._printSymbols(production.replacement)}`)
+            .map((production) => `${this._getPrintableSymbol(production.initialSymbol)} → ${this._getPrintableSymbol(production.replacement)}`)
             .join("; ");
     
         let nonterminalSymbolsOutput = 
@@ -74,15 +74,15 @@ class GrammarInterpreterUI {
          });
     }
 
-    _printSymbols(symbols) {
+    _getPrintableSymbol(symbols) {
         if (symbols == null)
-            return "λ";
-        return symbols;
+            return this.grammarColor.lambdaSymbol("λ");
+        return this.colorizer.colorize(symbols);
     }
 
     _getSetString(set) {
         return `{ ${ [...set]
-            .map(this._printSymbols)
+            .map((symbols) => this._getPrintableSymbol(symbols))
             .join(", ") } }`;
     }
 
