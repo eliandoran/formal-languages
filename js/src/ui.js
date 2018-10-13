@@ -18,14 +18,14 @@ class GrammarInterpreterUI {
             return;
     
         let productionsOutput = grammar.productions
-            .map((production) => `${production.initialSymbol} -> ${this._printSymbols(production.replacement)}`)
+            .map((production) => `${production.initialSymbol} → ${this._printSymbols(production.replacement)}`)
             .join("; ");
     
         let nonterminalSymbolsOutput = 
-            `V_N = ${ this._getSetString(grammar.nonterminalSymbols) }`;
+            `Vₙ = ${ this._getSetString(grammar.nonterminalSymbols) }`;
     
         let terminalSymbolsOutput =
-            `V_T = ${ this._getSetString(grammar.terminalSymbols) }`;
+            `Vₜ = ${ this._getSetString(grammar.terminalSymbols) }`;
         
         console.log([
             productionsOutput,
@@ -99,7 +99,7 @@ ${chalk.yellow.bold("Temă Limbaje formale")}
 ${chalk.white.bold("Autor: Doran Adoris Elian, 10/2018")}
 
 Introduceți textul unei gramatici independente de context pentru a afișa mulțimile \
-${chalk.green("V_N")}, ${chalk.green("V_T")}, ${chalk.green("S")} și ${chalk.green("P")} aferente.
+${chalk.green("Vₙ")}, ${chalk.green("Vₜ")}, ${chalk.green("S")} și ${chalk.green("P")} aferente.
 
 Regulile de introducere a datelor sunt următoarele:
   1.  Primul simbol din prima producție reprezintă axioma (simbolul de start);
