@@ -18,7 +18,7 @@ class GrammarInterpreterUI {
             return;
     
         let productionsOutput = grammar.productions
-            .map((production) => `${production.initialSymbol} -> ${production.replacement || "lambda"}`)
+            .map((production) => `${production.initialSymbol} -> ${this._printSymbols(production.replacement)}`)
             .join("; ");
     
         let nonterminalSymbolsOutput = 
@@ -31,7 +31,7 @@ class GrammarInterpreterUI {
             productionsOutput,
             nonterminalSymbolsOutput,
             terminalSymbolsOutput ].join("\n"));
-    }
+    }    
 
     start() {
         const inquirer = require("inquirer");
@@ -71,9 +71,15 @@ class GrammarInterpreterUI {
          });
     }
 
+    _printSymbols(symbols) {
+        if (symbols == null)
+            return "λ";
+        return symbols;
+    }
+
     _getSetString(set) {
         return `{ ${ [...set]
-            .map((symbol) => symbol !== null ? symbol : "lambda")
+            .map(this._printSymbols)
             .join(", ") } }`;
     }
 
