@@ -1,3 +1,4 @@
+const fs = require("fs");
 const chalk = require("chalk");
 const GrammarParser = require("./grammar");
 const GrammarColorizer = require("./colorizer");
@@ -43,9 +44,38 @@ class GrammarInterpreterUI {
 
         console.log(this._getWelcomeMessage());
 
+        prompt.registerPrompt("fuzzypath", require("inquirer-fuzzy-path"));
+
         prompt([
             {
-                name: "grammar",
+                type: "list",
+                name: "inputMethod",
+                message: "Selectați modul de introducere a datelor:",
+                choices: [
+                    {
+                        name: "De la tastatură",
+                        value: "keyboard"
+                    },
+
+                    {
+                        name: "Dintr-un fișier",
+                        value: "file"
+                    }
+                ]
+            },
+
+            {
+                type: 'fuzzypath',
+                name: 'file',
+                pathFilter: (isDirectory) => !isDirectory,
+                rootPath: './examples',
+                message: "Selectați fișierul de intrare:",
+                suggestOnly: false,
+                when: (data) => data.inputMethod === "file"
+            },
+
+            {
+                name: "keyboard",
                 message: "Date gramatică:",
                 default: this.exampleInput,
                 transformer: (input) => colorizer.colorize(input),
@@ -53,25 +83,44 @@ class GrammarInterpreterUI {
                     try {
                         parser.parse(input);
                     } catch (e) {
-                        const message = [
-                            `${chalk.whiteBright(e.message)}`,
-                            `\t${colorizer.colorize(input)}`
-                        ];
-        
-                        if (e.startPos !== undefined) {
-                            const arrow = this._getArrowIndicator(e.startPos, e.length);
-                            message.push(`\t${chalk.red.bold(arrow)}`);
-                        }
-        
-                        return chalk.redBright(message.join("\n"));
+                        return this._getPrintableValidationException(e, input);
                     }
         
                     return true;
-                }
+                },
+                when: (data) => data.inputMethod === "keyboard"
             }
-         ]).then((userData) => {
-             this.display(userData.grammar);
-         });
+        ]).then((userData) => {
+            console.log();
+
+            let grammar;
+            if (userData.inputMethod === "file")
+                grammar = fs.readFileSync(userData.file).toString();
+            else
+                grammar = userData.keyboard;
+
+            grammar = grammar.trim();
+
+            try {
+                this.display(grammar);
+            } catch (e) {
+                console.log(this._getPrintableValidationException(e, grammar));
+            }
+        });
+    }
+
+    _getPrintableValidationException(e, input) {
+        const message = [
+            `${chalk.whiteBright(e.message)}`,
+            `\t${this.colorizer.colorize(input)}`
+        ];
+
+        if (e.startPos !== undefined) {
+            const arrow = this._getArrowIndicator(e.startPos, e.length);
+            message.push(`\t${chalk.red.bold(arrow)}`);
+        }
+
+        return chalk.redBright(message.join("\n"));
     }
 
     _getPrintableSymbol(symbols) {

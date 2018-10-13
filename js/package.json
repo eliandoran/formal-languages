@@ -18,6 +18,7 @@
   "homepage": "https://github.com/eliandoran/formal-languages#readme",
   "dependencies": {
     "expand-range": "^2.0.1",
-    "inquirer": "^6.2.0"
+    "inquirer": "^6.2.0",
+    "inquirer-fuzzy-path": "^1.0.0"
   }
 }
