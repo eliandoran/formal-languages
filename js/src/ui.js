@@ -130,8 +130,13 @@ class GrammarInterpreterUI {
     }
 
     _getSetString(set) {
-        return `{ ${ [...set]
-            .map((symbols) => this._getPrintableSymbol(symbols))
+        const symbols = [...set];
+
+        if (symbols.length === 0)
+            return "∅";
+
+        return `{ ${ symbols
+            .map((symbol) => this._getPrintableSymbol(symbol))
             .join(", ") } }`;
     }
 
