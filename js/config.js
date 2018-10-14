@@ -5,8 +5,8 @@ const grammarDefinition = {
     lambdaSymbol: "@",
     separatorSymbol: "$",
     endingSymbol: "&",
-    terminalAlphabet: expand("a..z"),
-    nonterminalAlphabet: expand("A..Z")
+    terminalAlphabet: expand("a..z").join(""),
+    nonterminalAlphabet: expand("A..Z").join("")
 };
 
 const grammarColor = {

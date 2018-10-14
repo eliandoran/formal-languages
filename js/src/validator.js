@@ -27,12 +27,17 @@ class GrammarValidator {
     }
 
     validateProduction(productionString, context) {
-        if (productionString.length < 2) {
+        if (productionString.length < 2)
             throw new ValidationException("O producție trebuie să aibă cel puțin două caractere.", {
                 startPos: context.startPos,
                 length: productionString.length
             });
-        }
+
+        if (this.def.terminalAlphabet.includes(productionString[0]))
+            throw new ValidationException("Primul simbol dintr-o producție nu poate fi un simbol terminal.", {
+                startPos: context.startPos,
+                length: 1
+            });
     }
 
     validateProductionReplacement(productionReplacement, context) {
