@@ -39,18 +39,15 @@ class GrammarParser {
                     replacement
                 }
             });
+
+        let inputTokens = input.split("");
     
         const terminalSymbols = new Set(
-            productions
-                .map((production) => (production.replacement !== null ? production.replacement.split("") : null))
-                .reduce((acc, symbols) => acc.concat(symbols), [])
-                .filter((symbol) => (this.def.terminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
+            inputTokens.filter((ch) => this.def.terminalAlphabet.includes(ch))
         );
     
         const nonterminalSymbols = new Set(
-            productions
-                .map((production) => production.initialSymbol)
-                .filter((symbol) => (this.def.nonterminalAlphabet.indexOf(symbol) !== -1 || symbol === null))
+            inputTokens.filter((ch) => this.def.nonterminalAlphabet.includes(ch))
         );
 
         const startingSymbol = nonterminalSymbols.values().next().value;
