@@ -11,7 +11,7 @@ class GrammarColorizer {
                 let colorWrapper = this.colors.invalidSymbol;
 
                 for (var definition in this.def) {
-                    if (this.def[definition].indexOf(ch) !== -1) {
+                    if (this.def[definition].includes(ch)) {
                         colorWrapper = this.colors[definition];
                         break;
                     }

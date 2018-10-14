@@ -41,7 +41,7 @@ class GrammarValidator {
     }
 
     validateProductionReplacement(productionReplacement, context) {
-        if (productionReplacement.indexOf(this.def.lambdaSymbol) === -1)
+        if (!productionReplacement.includes(this.def.lambdaSymbol))
             return;
         
         if (productionReplacement.length > 1)
