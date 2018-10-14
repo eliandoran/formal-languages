@@ -15,15 +15,19 @@ class GrammarValidator {
     }
 
     validateInput(input) {
-        if (input.length < 2) {
+        if (input.length < 2)
             throw new ValidationException("Gramatica nu poate fi vidă.");
-        }
 
-        if (input[input.length - 1] != this.def.endingSymbol) {
+        if (input[input.length - 1] != this.def.endingSymbol)
             throw new ValidationException(`Gramatica trebuie să conțină simbolul de sfârșit "${this.def.endingSymbol}".`, {
                 startPos: input.length
             });
-        }
+
+        let firstEndSymbolIndex = input.indexOf(this.def.endingSymbol);
+        if (firstEndSymbolIndex !== input.length - 1)
+            throw new ValidationException("Gramatica nu poate conține mai multe simboluri de sfârșit.", {
+                startPos: firstEndSymbolIndex
+            });
     }
 
     validateProduction(productionString, context) {
