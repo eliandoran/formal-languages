@@ -28,6 +28,12 @@ class GrammarValidator {
             throw new ValidationException("Gramatica nu poate conține mai multe simboluri de sfârșit.", {
                 startPos: firstEndSymbolIndex
             });
+
+        if (!input.split("").some((ch) => this.def.terminalAlphabet.includes(ch)))
+            throw new ValidationException("Gramatica trebuie să conțină cel puțin un simbol terminal.", {
+                startPos: 0,
+                length: input.length
+            });
     }
 
     validateProduction(productionString, context) {
